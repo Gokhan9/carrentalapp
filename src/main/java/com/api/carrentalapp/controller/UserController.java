@@ -1,7 +1,6 @@
 package com.api.carrentalapp.controller;
 
 import com.api.carrentalapp.model.User;
-import com.api.carrentalapp.repository.UserRepository;
 import com.api.carrentalapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +10,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
