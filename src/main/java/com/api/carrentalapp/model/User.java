@@ -1,5 +1,6 @@
 package com.api.carrentalapp.model;
 
+import com.api.carrentalapp.entity.Auditable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,19 +13,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "users") //TABLO ADINI "users" OLARAK KAYDET. "POSTGRESQL" user olarak ENGELLEDİĞİ İÇİN OLUŞTURULDU.
-public class User {
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Birbirinden farklı "id" ürettiriyor.
     private Long id;
 
     @Column(nullable = false) //BOŞ OLMAYACAK
-    private String name;
+    private String username;
     @Column(nullable = false)
     private String surname;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
-    private String mail;
+    private String email;
 
 }
