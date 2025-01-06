@@ -1,22 +1,13 @@
 package com.api.carrentalapp.converter;
 
+import com.api.carrentalapp.request.VehicleRequest;
 import com.api.carrentalapp.dto.VehicleDto;
+import com.api.carrentalapp.model.User;
 import com.api.carrentalapp.model.Vehicle;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 @Component
 public class VehicleDtoConverter {
-
-    private final CustomerDtoConverter customerDtoConverter;
-    private final TransactionDtoConverter transactionDtoConverter;
-
-    public VehicleDtoConverter(CustomerDtoConverter customerDtoConverter, TransactionDtoConverter transactionDtoConverter) {
-        this.customerDtoConverter = customerDtoConverter;
-        this.transactionDtoConverter = transactionDtoConverter;
-    }
 
     //Fromlanan yeni oluşturulan dto'nun değeri olarak ata.
     public VehicleDto convert(Vehicle from) {
@@ -24,11 +15,48 @@ public class VehicleDtoConverter {
                 from.getBrand(),
                 from.getModel(),
                 from.getCreationDate(),
-                from.getCustomer(),
-                customerDtoConverter.convertToVehicleCustomer(from.getCustomer()),
-                Objects.requireNonNull(from.getTransactions())
-                        .stream()
-                        .map(transactionDtoConverter::convert)
-                        .collect(Collectors.toSet()));
+                from.getUser());
     }
+
+    public Vehicle convert(VehicleRequest request, User user) {
+
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setUser(user);
+        vehicle.setBrand(request.getBrand());
+        vehicle.setModel(request.getModel());
+        vehicle.setCreationDate(request.getCreationDate());
+        vehicle.setRegistrationDate(request.getRegistrationDate());
+        vehicle.setChassisNumber(request.getChassisNumber());
+        vehicle.setMileage(request.getMileage());
+
+        return vehicle;
+    }
+
+    public Vehicle toVehicle(VehicleDto dto) {
+
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setId(dto.getId());
+        vehicle.setBrand(dto.getBrand());
+        vehicle.setModel(dto.getModel());
+        vehicle.setCreationDate(dto.getCreationDate());
+        vehicle.setUser(dto.getUser());
+
+        return vehicle;
+    }
+
+    public VehicleDto toDto(Vehicle vehicle) {
+
+        VehicleDto vehicleDto = new VehicleDto();
+
+        vehicleDto.setId(vehicle.getId());
+        vehicleDto.setBrand(vehicle.getBrand());
+        vehicleDto.setModel(vehicle.getModel());
+        vehicleDto.setCreationDate(vehicle.getCreationDate());
+        vehicleDto.setUser(vehicle.getUser());
+
+        return vehicleDto;
+    }
+
 }

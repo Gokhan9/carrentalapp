@@ -24,14 +24,16 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     // Constructor Injection
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, UserDetailsServiceImpl userDetailsService1, JwtAuthenticationEntryPoint handler, JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.userDetailsService = userDetailsService1;
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService,
+                          JwtAuthenticationEntryPoint handler,
+                          JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.userDetailsService = userDetailsService;
         this.handler = handler;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+    @Bean //Şifre için herhangi bir hash işlemi yapmaması sağlanır.
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -39,7 +41,6 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,7 +57,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 }
 
 

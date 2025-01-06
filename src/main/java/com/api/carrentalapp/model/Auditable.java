@@ -1,4 +1,4 @@
-package com.api.carrentalapp.entity;
+package com.api.carrentalapp.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

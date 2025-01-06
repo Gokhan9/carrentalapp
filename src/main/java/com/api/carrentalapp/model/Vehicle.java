@@ -25,27 +25,27 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String brand; // markası
-    private String model; // model
-    private LocalDateTime creationDate; // oluşturulma tarihi
-    private LocalDate registrationDate; // kayıt tarihi
-    private String chassisNumber; // şase numarası
-    private Integer mileage; // araç km
+    private String brand;
+    private String model;
+    private LocalDateTime creationDate;
+    private LocalDate registrationDate;
+    private String chassisNumber;
+    private Integer mileage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
-    //account'a ait customerlar çekmek
-    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Transaction> transactions;
-
-
-    public Vehicle(Customer customer, BigDecimal initialRecord, LocalDateTime now) {
+    public Vehicle(Long id, String brand, String model, String chassisNumber, int mileage) {
+        this.id = id;
+        this.brand = brand;
+        this.model = model;
+        this.chassisNumber = chassisNumber;
+        this.mileage = mileage;
     }
 }
 

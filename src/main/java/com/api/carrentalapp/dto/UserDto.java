@@ -1,17 +1,18 @@
 package com.api.carrentalapp.dto;
 
-import com.api.carrentalapp.model.Customer;
 import lombok.*;
 
 //VehicleDto içerisinde, "CustomerDto" bilgileri yer alıcak.
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehicleCustomerDto {
+public class UserDto {
 
     private Long id;
 
-    private String name;
+    private String username;
     private String surname;
+    private String password;
 
+    
 }

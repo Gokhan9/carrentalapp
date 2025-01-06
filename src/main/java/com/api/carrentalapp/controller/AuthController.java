@@ -5,6 +5,7 @@ import com.api.carrentalapp.security.JwtTokenProvider;
 import com.api.carrentalapp.model.User;
 import com.api.carrentalapp.request.UserRequest;
 import com.api.carrentalapp.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,19 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @PostMapping("login")
     public String login(@RequestBody UserRequest loginRequest){
@@ -44,7 +39,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-            if(userService.getOneUserByUsernName(registerRequest.username()) != null)
+            if(userService.getOneUserByUserName(registerRequest.username()) != null)
             return new ResponseEntity<>("Username already in use." , HttpStatus.BAD_REQUEST);
 
         User user = new User();

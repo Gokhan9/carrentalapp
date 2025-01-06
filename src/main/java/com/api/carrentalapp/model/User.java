@@ -1,14 +1,11 @@
 package com.api.carrentalapp.model;
 
-import com.api.carrentalapp.entity.Auditable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+import java.util.Set;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,13 +16,16 @@ public class User extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Birbirinden farklı "id" ürettiriyor.
     private Long id;
 
-    @Column(nullable = false) //BOŞ OLMAYACAK
+    @Column(name = "username", nullable = false) //BOŞ OLMAYACAK
     private String username;
-    @Column(nullable = false)
+    @Column(name="surname", nullable = false)
     private String surname;
-    @Column(nullable = false)
+    @Column(name="password", nullable = false)
     private String password;
-    @Column(nullable = false)
+    @Column(name="email", nullable = false)
     private String email;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Vehicle> vehicles;
 
 }
