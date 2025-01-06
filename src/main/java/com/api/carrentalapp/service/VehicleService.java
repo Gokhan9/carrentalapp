@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +52,28 @@ public class VehicleService {
 
         vehicleRepository.delete(vehicle);
         return vehicleDtoConverter.toDto(vehicle);
+    }
+
+    public List<Vehicle> getAllAvailableVehicle(){
+        return vehicleRepository.findByStatus(Vehicle.Status.AVAILABLE);
+    }
+
+    public String buyVehicle(Long vehicleId) {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId);
+
+        if (optionalVehicle.isPresent()) {
+            Vehicle vehicle = optionalVehicle.get();
+
+            if (vehicle.getStatus() == Vehicle.Status.SOLD) {
+                return "Error: This vehicle is already solded.";
+            }
+
+            vehicle.setStatus(Vehicle.Status.SOLD);
+            vehicleRepository.save(vehicle);
+            return "Vehicle purchased successfully.";
+        } else {
+            return "Error: Vehicle is not found.";
+        }
     }
 
 }

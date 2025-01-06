@@ -60,4 +60,15 @@ public class VehicleController {
         return new ResponseEntity<>(deletedVehicleDto, HttpStatus.ACCEPTED);
     }
 
+    //satılmamış olan araçları listeledik.
+    @GetMapping
+    public List<Vehicle> getAvailableVehicle() {
+        return vehicleService.getAllAvailableVehicle();
+    }
+
+    @PutMapping("/buy/{id}")
+    public String buyVehicle(@PathVariable Long id) {
+        return vehicleService.buyVehicle(id);
+    }
+
 }

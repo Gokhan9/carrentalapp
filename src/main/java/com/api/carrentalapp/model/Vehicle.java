@@ -5,12 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 
 @Getter
@@ -32,9 +29,14 @@ public class Vehicle {
     private String chassisNumber;
     private Integer mileage;
 
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.AVAILABLE;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "vehicle_id", nullable = false)
@@ -46,6 +48,10 @@ public class Vehicle {
         this.model = model;
         this.chassisNumber = chassisNumber;
         this.mileage = mileage;
+    }
+
+    public enum Status {
+        AVAILABLE,SOLD
     }
 }
 
