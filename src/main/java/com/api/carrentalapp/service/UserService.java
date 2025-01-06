@@ -71,21 +71,11 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User is not found by id." + id));
     }
 
-    public String registerUser(User user) {
-        if (userRepository.existsByUserEmail(user.getEmail())) {
-            return "E-Mail already exists!";
-        }
-        //Şifreyi hashleyerek kaydediyoruz.
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return "User registered successfully.";
-    }
-
     public ResponseEntity<?> confirmEmail(String token) {
         Optional<ConfirmationToken> confirmationToken = Optional.ofNullable(confirmationTokenRepository.findByToken(token));
 
         if(confirmationToken.isPresent()) {
-            User user = confirmationToken
+            User user = confirmationToken.get().getUser();
         }
     }
 
