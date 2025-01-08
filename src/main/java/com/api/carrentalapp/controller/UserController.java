@@ -1,13 +1,14 @@
 package com.api.carrentalapp.controller;
 
-import ch.qos.logback.core.model.Model;
-import com.api.carrentalapp.dto.UserDto;
 import com.api.carrentalapp.model.User;
+import com.api.carrentalapp.repository.UserRepository;
 import com.api.carrentalapp.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
+
 
 import java.util.List;
 
@@ -17,6 +18,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //yukarıdaki users path'i için çalışıcak
     @GetMapping
@@ -47,6 +54,15 @@ public class UserController {
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
         return userService.saveOneUser(user);
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestBody User user) {
+        User foundUser = userRepository.findByUsername(user.getUsername());
+        if (foundUser != null && passwordEncoder.matches(user.getPassword(), foundUser.getPassword())) {
+            return "Login successful.";
+        }
+        return "Invalid username or password";
     }
 
     @RequestMapping(value = "/confirm-account", method = {RequestMethod.GET, RequestMethod.POST})

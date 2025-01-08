@@ -1,10 +1,10 @@
 package com.api.carrentalapp.controller;
 
+import com.api.carrentalapp.repository.UserRepository;
 import com.api.carrentalapp.repository.VehicleRepository;
 import com.api.carrentalapp.request.VehicleRequest;
 import com.api.carrentalapp.dto.VehicleDto;
 import com.api.carrentalapp.model.Vehicle;
-import com.api.carrentalapp.service.UserService;
 import com.api.carrentalapp.service.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,7 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
     private final VehicleRepository vehicleRepository;
+    private final UserRepository userRepository;
 
     //kayıtları listele
     @GetMapping
@@ -40,35 +41,46 @@ public class VehicleController {
         return vehicleRepository.save(vehicle);
     }
 
-    //create - yeni bir veri kaydı oluşturmak.
-    @PostMapping("/vehicles")
+    @PostMapping("/create")
     public ResponseEntity<VehicleDto> createVehicle(@Valid @RequestBody VehicleRequest request) {
         return ResponseEntity.ok(vehicleService.createVehicle(request));
     }
 
-    //Update - mevcut bir verinin kaydını değiştirmek
-    @PutMapping("/{userId}")
+    @PutMapping("/update/{userId}")
     public ResponseEntity<VehicleDto> updateVehicleById(@RequestBody VehicleDto vehicleDto) {
         VehicleDto updatedVehicleDto = vehicleService.updateVehicle(vehicleDto);
         return new ResponseEntity<>(updatedVehicleDto, HttpStatus.OK);
     }
 
-    //delete - mevcut bir veri kaydı silmek
-    @DeleteMapping("/{vehicleId}")
+    @DeleteMapping("/delete/{vehicleId}")
     public ResponseEntity<VehicleDto> deleteVehicleById(@PathVariable Long vehicleId) {
         VehicleDto deletedVehicleDto = vehicleService.deleteVehicle(vehicleId);
         return new ResponseEntity<>(deletedVehicleDto, HttpStatus.ACCEPTED);
     }
 
-    //satılmamış olan araçları listeledik.
+    //satılmamış olan araçlar.
     @GetMapping
     public List<Vehicle> getAvailableVehicle() {
         return vehicleService.getAllAvailableVehicle();
     }
 
-    @PutMapping("/buy/{id}")
+    @PutMapping("/buy/{vehicleId}")
     public String buyVehicle(@PathVariable Long id) {
         return vehicleService.buyVehicle(id);
     }
 
+
+    @PostMapping("/buy/{vehicleId}")
+    public String buyVehicles(@PathVariable Long vehicleId, @RequestParam Long buyerId) {
+        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+                .orElseThrow();
+        if (vehicle.isSold() || vehicle.isDeleted()) {
+            return "Vehicle is not available or purchase";
+        }
+        vehicle.setUser(userRepository.findById(buyerId)
+                .orElseThrow());
+        vehicle.setSold(true);
+        vehicleRepository.save(vehicle);
+        return "Vehicle purchased successfully.";
+    }
 }

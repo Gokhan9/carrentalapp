@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,15 +27,15 @@ public class Vehicle {
     private LocalDate registrationDate;
     private String chassisNumber;
     private Integer mileage;
+    private boolean deleted = false;
+    private boolean sold = false;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.AVAILABLE;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "vehicle_id", nullable = false)

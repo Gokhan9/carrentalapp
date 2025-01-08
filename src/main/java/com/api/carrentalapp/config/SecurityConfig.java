@@ -2,7 +2,6 @@ package com.api.carrentalapp.config;
 
 import com.api.carrentalapp.security.JwtAuthenticationEntryPoint;
 import com.api.carrentalapp.security.JwtAuthenticationFilter;
-import com.api.carrentalapp.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -19,15 +17,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserDetailsServiceImpl userDetailsService;
+
     private final JwtAuthenticationEntryPoint handler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     // Constructor Injection
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService,
-                          JwtAuthenticationEntryPoint handler,
+    public SecurityConfig(JwtAuthenticationEntryPoint handler,
                           JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.userDetailsService = userDetailsService;
         this.handler = handler;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }

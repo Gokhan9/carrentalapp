@@ -24,6 +24,7 @@ public class User extends Auditable {
     private String password;
     @Column(name="email", nullable = false)
     private String email;
+    private boolean enabled;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<Vehicle> vehicles;
